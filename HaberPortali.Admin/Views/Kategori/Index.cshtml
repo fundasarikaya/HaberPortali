@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Kategori Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*@model IEnumerable<HaberPortali.Data.Model.Kategori>*@
+@*sayfalamadan sonra model kısmınıda aşagıdaki gibi guncelledik*@
+@model PagedList.IPagedList<HaberPortali.Data.Model.Kategori>
+@using PagedList.Mvc;
+<div class="container-fluid">
+    <div class="row">
+        <!-- Responsive table -->
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <header class="panel-heading">@ViewBag.Title</header>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Kategori Adı</th>
+                                    <th>Üst Kategori</th>
+                                    <th>Durum</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td><span class="label label-success">@item.ID</span></td>
+                                        <td>@item.KategoriAdi</td>
+                                        <td>
+                                            @foreach (var ustkategori in Model.Where(x => x.ID == item.ParentID))
+                                            {
+                                                <span>@ustkategori.KategoriAdi</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.AktifMi == true)
+                                            {
+                                                <b class="label label-success">Aktif</b>
+                                            }
+                                            else
+                                            {
+                                                <b class="label label-danger ">Pasif</b>
+                                            }
+                                        </td>
+                                        <td>
+                                            @*<button class="btn btn-default btn-sm">Düzenle</button>*@
+                                            <a href=" @Url.Action("Duzenle","Kategori",new {ID=item.ID })" class="btn btn-default btn-sm" id="">Düzenle</a>
+                                            @*@Html.ActionLink("Delete", "Sil", new { ID = item.ID }, new { onclick="return confirm('Kaydı silmek istediginize emin misiniz?')"})*@
+                                            @*burayı artık global js uzerinden gercekleştriiyoruz*@
+                                            <button class="btn btn-default btn-sm" id="kategoriDelete" onclick="KategoriSil()" data-id="@item.ID">Sil</button>
+                                            @*bu kısım global.js de calışmadıgı icin ben global2.js uzerinden silme işlemi gerceklşeitiryodum. ama videoda yontem degiştirdik. bende onu uyguladım o yuzden buttondan onclick sildik*@
+                                            @*<button class="btn btn-default btn-sm" id="kategoriDelete" data-id="@item.ID">Sil</button>*@
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @Html.PagedListPager(Model, Sayfa => Url.Action("Index", new { Sayfa }), PagedListRenderOptions.Classic)
+        </div>
+        <!-- /Responsive table -->
+    </div>
+</div>
+
+<script src="~/Scripts/Global2.js"></script>

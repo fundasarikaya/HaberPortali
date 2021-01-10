@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Duzenle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model HaberPortali.Data.Model.Kategori
+<div class="container-fluid">
+    <!-- Basic form -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <header class="panel-heading">@ViewBag.Title</header>
+                <div class="panel-body">
+                    @Html.HiddenFor(x => x.ID)
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="KategoriAdi">Üst Kategori </label>
+                            @Html.DropDownListFor(model => model.ParentID, new SelectList(ViewBag.Kategori, "ID", "KategoriAdi"), ("Seciniz"), new { @class = "form-control", id = "ParentID" })
+                        </div>
+                        <div class="form-group">
+                            <label for="KategoriAdi">Kategori Adı</label>
+                            @*<input type="email" class="form-control" id="kategoriAdi" placeholder="Kategori Adı">*@
+                            @Html.TextBoxFor(x=>x.KategoriAdi,new { @class="form-control",id="kategoriAdi",placeholder="Kategori Adı"})
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Kategori URL</label>
+                            @*<input type="text" class="form-control" id="kategoriURL" placeholder="URL">*@
+                            @Html.TextBoxFor(x=>x.URL,new  { @class="form-control",id="kategoriURL",placeholder="URL"})
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                @*<input type="checkbox" checked id="kategoriAktif"> Aktif Mi*@
+                                @Html.CheckBoxFor(x=>x.AktifMi,new { @checked="checked",id="kategoriAktif"}) Aktif Mi?
+                            </label>
+                        </div>
+                        <a href="#" class="btn btn-default" onclick="KategoriDuzenle();">Kaydet</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Basic form -->
+
+</div>
